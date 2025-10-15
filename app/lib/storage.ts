@@ -75,5 +75,34 @@ export async function getAllItems(): Promise<Item[]> {
     isOnline: Boolean(item.isOnline),
   }));
 }
+
+// Delete an item by ID
+export async function deleteItem(id: string): Promise<void> {
+  console.log('🔥 deleteItem called with ID:', id);
+  const db = await initDatabase();
+  await db.runAsync('DELETE FROM items WHERE id = ?', [id]);
+}
+export async function updateItem(id: string, data: Partial<Omit<Item, 'id' | 'date'>>): Promise<void> {
+  const db = await initDatabase();
+  const { cardUsed, category, notes } = data;
+
+  await db.runAsync(
+    `UPDATE items
+     SET name = ?, price = ?, store = ?, isOnline = ?, paymentMethod = ?, cardUsed = ?, category = ?, notes = ?
+     WHERE id = ?`,
+    [
+      data.name ?? '',
+      data.price ?? 0,
+      data.store ?? '',
+      data.isOnline ? 1 : 0,
+      data.paymentMethod ?? 'cash',
+      cardUsed ?? null,
+      category ?? null,
+      notes ?? null,
+      id,
+    ]
+  );
+}
+
 export { initDatabase };
 
