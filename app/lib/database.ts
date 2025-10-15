@@ -23,7 +23,6 @@ export async function initDatabase() {
         notes TEXT
       );
 
-      -- Composite group
       CREATE TABLE IF NOT EXISTS composite_groups (
         id TEXT PRIMARY KEY,
         name TEXT NOT NULL,
